@@ -2,7 +2,7 @@
 
 PHASE 1:
 type the following command into terminal:
-python3 phase1.py <xml filename>
+python3 phase1.py xml-filename
   -eg. python3 phase1.py 10.xml
   
 PHASE 2:
