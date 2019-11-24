@@ -1,6 +1,13 @@
 import xml.etree.ElementTree
 import sys
 import re
+import os
+
+
+Files = ['datesN.txt', 'emailsN.txt', 'recsN.txt', 'termsN.txt']
+FilesS =  ['datesS.txt', 'emailsS.txt', 'recsS.txt', 'termsS.txt']
+indexes = ['da.idx', 'em.ixd', 're.idx', 'te.idx']
+
 
 startDocumentTag = "<emails type=\"array\">\n"
 mailStartTag = "<mail>"
@@ -127,7 +134,19 @@ def writeToFile(fileName, lines):
 	f.close()
 
 
+
+def restart():
+	for i in range(len(Files)):
+		if os.path.exists(Files[i]):
+			os.remove(Files[i])
+		if os.path.exists(FilesS[i]):
+			os.remove(FilesS[i])
+		if os.path.exists(indexes[i]):
+			os.remove(indexes[i])
+
+
 if __name__ == "__main__":
+	restart()
 	if len(sys.argv) < 2:
 		print("Enter the document from which to parse as the argument.")
 		sys.exit()
