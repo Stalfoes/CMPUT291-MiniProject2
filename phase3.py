@@ -182,7 +182,7 @@ def getQueries():
 		results = []
 		query = input(" >> ")
 		if query == 'q':
-            break
+			break
 		elif query == 'h':
 			helpPage()
 			continue
