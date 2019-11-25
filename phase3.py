@@ -58,39 +58,50 @@ def equality(key, values):
             database = termsDatabase()
             curs = database.cursor()
             if key == 'subj':
-                result = curs.set(b's-'+i.encode("utf-8"))
+                iter = curs.set(b's-'+i.encode("utf-8"))
             elif key == 'body':
-                result = curs.set(b'b-'+i.encode("utf-8"))
+                iter = curs.set(b'b-'+i.encode("utf-8"))
            
         elif x == 'em.idx':
             database = emailsDatabase()
             curs = database.cursor()
             if key == 'cc':
-                result = curs.set(b'cc-'+i.encode("utf-8"))
+                iter = curs.set(b'cc-'+i.encode("utf-8"))
             elif key == 'bcc':
-                result = curs.set(b'bcc-'+i.encode("utf-8"))
+                iter = curs.set(b'bcc-'+i.encode("utf-8"))
             elif key == 'to':
-                result = curs.set(b'to-'+i.encode("utf-8"))
+                iter = curs.set(b'to-'+i.encode("utf-8"))
             elif key == 'from':
-                result = curs.set(b'from-'+i.encode("utf-8"))
+                iter = curs.set(b'from-'+i.encode("utf-8"))
                 
         elif x == 'da.idx':
                 database = datesDatabase()
                 curs = database.cursor()
-                result = curs.set(i.encode("utf-8"))
+                iter = curs.set(i.encode("utf-8"))
                 
-        print(result)
-        iter = curs.first()
-        while iter:
-                print(iter)
-                dup = curs.next_dup()
-                while(dup!=None):
-                    print(dup)
-                    dup = curs.next_dup()
-                iter = curs.next()
+        #print(result)
+        #iter = curs.first()
+        if iter!=None:
+            results.append((iter[0].decode("utf-8"), iter[1].decode("utf-8")))
+            for i in range(curs.count()-1):
+                iter = curs.next_dup()
+                results.append((iter[0].decode("utf-8"), iter[1].decode("utf-8")))
+                
+        #print(results)
+        #return results
 
-        curs.close()
-        database.close()
+        #while iter:
+        #    print(curs.count())
+        #    print((iter[0].decode("utf-8"), iter[1].decode("utf-8")))
+        #        
+        #    dup = curs.next_dup()
+        #    while(dup!=None):
+        #        print(dup)
+        #        dup = curs.next_dup()
+        #    iter = curs.next()
+
+    curs.close()
+    database.close()
         
         
         #results.append(result)
@@ -126,20 +137,17 @@ def lookup(query):
             else:
                 value = value + char.lower()
     values.append(value)
-    #print(values)
+    print(values)
     #print(operators)
     if querytype == 'equality':
-        results = equality(key, values)
+        #equality(key, values)
+         results = equality(key, values)
     elif querytype == 'range':
         querytype = ''
     
-    #return results
+    return results
     
-    #curs = database.cursor()
-    #iter = curs.first()
-    #while iter:
-    #        print(iter)
-    #        iter = curs.next()
+    
 
 
 def getQueries():
@@ -177,17 +185,24 @@ def getQueries():
             elif (':' not in query[i] and '>' not in query[i] and '<' not in query[i] and '<=' not in query[i] and '>=' not in query[i] and '=' not in query[i]):
                 formatted[-1] = '-'.join([formatted[-1], query[i]])
             
-        #print(formatted)
+        print(formatted)
 
         #for i in formatted:
-        #    results.append(lookup(i))
-        #print(results)    
-        #op = set.intersection(*map(set,results))
+        #    lookup(i)
 
-        #if op:
-        #    print(op)
-        #else:
-        #    print('None')
+        for i in formatted:
+            results.append(lookup(i))
+        
+        #for i in results:
+        #    print(str(i)+'\n')    
+        
+        op = set.intersection(*map(set,results))
+
+        if op:
+            for i in op:
+                print(i)
+        else:
+            print('None')
 
 
 
