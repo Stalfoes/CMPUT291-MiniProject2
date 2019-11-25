@@ -6,7 +6,7 @@ import os
 
 Files = ['datesN.txt', 'emailsN.txt', 'recsN.txt', 'termsN.txt']
 FilesS =  ['datesS.txt', 'emailsS.txt', 'recsS.txt', 'termsS.txt']
-indexes = ['da.idx', 'em.ixd', 're.idx', 'te.idx']
+indexes = ['da.idx', 'em.idx', 're.idx', 'te.idx']
 
 
 startDocumentTag = "<emails type=\"array\">\n"

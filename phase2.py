@@ -2,7 +2,7 @@ import os
 
 Files = ['datesN.txt', 'emailsN.txt', 'recsN.txt', 'termsN.txt']
 FilesS =  ['datesS.txt', 'emailsS.txt', 'recsS.txt', 'termsS.txt']
-indexes = ['da.idx', 'em.ixd', 're.idx', 'te.idx']
+indexes = ['da.idx', 'em.idx', 're.idx', 'te.idx']
 trees = ['btree', 'btree', 'hash', 'btree']
 
 def checkMultipleCalls():
@@ -58,7 +58,7 @@ def removeSlash(read, write):
 			
 def makeIndexes(File, index, tree):
     # db_load -T -f emails.txt -t btree email.idx
-    os.system("db_load -T -f " + File + " -t " + tree + " " + index)
+    os.system("db_load -T -c duplicates=1 -f " + File + " -t " + tree + " " + index)
 	
 if __name__ == "__main__":
     run = checkMultipleCalls()
@@ -68,6 +68,6 @@ if __name__ == "__main__":
         for i in range(len(FilesS)):
             removeSlash(Files[i], FilesS[i])
             makeIndexes(FilesS[i], indexes[i], trees[i])
-            print(Files[i])
+            #print(Files[i])
             os.remove(Files[i])
 
