@@ -201,12 +201,48 @@ def doBoth(key):
     return results
 
 
+prefix = b''
 
-#def wildcard(key):
-#    results = []
+def orderByPrefix(left, right):
+    #print(type(left))
+    #print(type(right))
+    #print(prefix)
+    if type(left) == str:
+        left = left.encode("utf-8")
+    if type(right) == str:
+        right = right.encode("utf-8")
+    if left.startswith(prefix) and not right.startswith(prefix):
+        return -1
+    elif right.startswith(prefix) and not left.startswith(prefix):
+        return 1
+
+    if left < right:
+        return -1
+    elif left == right:
+        return 0
+    elif left > right:
+        return 1
 
 
-
+def wildcard(key):
+    results = []
+    database = db.DB()
+    #database.set_flags(db.DB_DUP)
+    global prefix
+    prefix = b'b-' + key.encode("utf-8")
+    database.set_bt_compare(orderByPrefix)
+    DB_File = 'te.idx'
+    database.open(DB_File, None, db.DB_BTREE)
+    curs = database.cursor()
+    iter = curs.set_range(prefix)
+    while(iter !=None):
+        #print("ITER 0 = " + str(iter[0].decode("utf-8")))
+        if(not iter[0].startswith(prefix)): 
+            break
+        results.append(iter[1].decode("utf-8"))
+        iter = curs.next()
+    #print("RETURNING")
+    return results
 
 def lookup(query):
     results = []
@@ -230,8 +266,8 @@ def lookup(query):
             elif char == '=' and not(operators):
                 querytype = 'equality'
         
-        #elif char == '%':
-        #    querytype = 'wildcard'
+        elif char == '%':
+            querytype = 'wildcard'
         elif k:
             key = key + char.lower()
         elif not(k):
@@ -251,8 +287,8 @@ def lookup(query):
         results = rangeQ(key, values[0], operators[0])
     elif querytype == '':
         results = doBoth(key)
-    #elif querytype == 'wildcard':
-    #    results = wildcard(key)
+    elif querytype == 'wildcard':
+        results = wildcard(key)
 
 
     return results
