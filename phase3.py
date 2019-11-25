@@ -164,15 +164,34 @@ def lookup(query):
     
     return results
     
-    
+	
+def helpPage():
+	print("Welcome to the query interface. Available commands are:")
+	print("q\tQuits the program.")
+	print("h\tDisplays this page.")
+	print("output=brief\tChanges the output type to brief (Row ID + Subject).")
+	print("output=full\tChanges the output type to full (Row ID + Record.")    
 
 
 def getQueries():
+	global briefOutput
+	global fullOutput
+	helpPage()
+	outputType = briefOutput
     while (True):
         results = []
-        query = input("enter the query below:\n")
+        query = input(" >> ")
         if query == 'q':
             break
+		elif query == 'h':
+			helpPage()
+			continue
+		elif query == "output=" + briefOutput:
+			outputType = briefOutput
+			continue
+		elif query == "output=" + fullOutput:
+			outputType = fullOutput
+			continue
         query = query.split(' ')
         while '' in query:
             query.remove('')
