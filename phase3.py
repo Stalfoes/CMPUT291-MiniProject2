@@ -178,10 +178,10 @@ def getQueries():
 	global fullOutput
 	helpPage()
 	outputType = briefOutput
-    while (True):
-        results = []
-        query = input(" >> ")
-        if query == 'q':
+	while (True):
+		results = []
+		query = input(" >> ")
+		if query == 'q':
             break
 		elif query == 'h':
 			helpPage()
