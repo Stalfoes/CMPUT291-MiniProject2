@@ -1,5 +1,5 @@
 from bsddb3 import db
-
+import xml.etree.ElementTree
 
 symbols = [':', '<', '>', '>=', '<=', '=']
 keyDict = {
@@ -12,6 +12,23 @@ keyDict = {
     'date' : 'da.idx',
 }
 
+briefOutput = "brief"
+fullOutput = "full"
+
+def getOutput(rowID, outputType):
+	global briefOutput
+	global fullOutput
+	record = ""
+	database = recsDatabase()
+	curs = database.cursor()
+	iter = curs.set(rowID.encode("utf-8"))
+	if iter != None:
+		record = iter[1].decode("utf-8")
+	if outputType == briefOutput:
+		mail = xml.etree.ElementTree.fromstring(record)
+		return mail.find('subj').text
+	elif outputType == fullOutput:
+		return record
 
 def termsDatabase(): 
     database = db.DB()
