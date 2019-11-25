@@ -42,7 +42,7 @@ def removeSlash(read, write):
 	out = open(write, 'w')
 
 	for line in inf:
-		line = line.replace('\\', '&92')
+		line = line.replace('\\', '&#92;')
 		k = True
 		key = ''
 		data = ''

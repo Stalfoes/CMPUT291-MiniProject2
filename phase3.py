@@ -201,6 +201,13 @@ def doBoth(key):
     return results
 
 
+
+#def wildcard(key):
+#    results = []
+
+
+
+
 def lookup(query):
     results = []
     k = True
@@ -222,7 +229,9 @@ def lookup(query):
                 operators[0] = operators[0] + char
             elif char == '=' and not(operators):
                 querytype = 'equality'
-
+        
+        #elif char == '%':
+        #    querytype = 'wildcard'
         elif k:
             key = key + char.lower()
         elif not(k):
@@ -242,6 +251,8 @@ def lookup(query):
         results = rangeQ(key, values[0], operators[0])
     elif querytype == '':
         results = doBoth(key)
+    #elif querytype == 'wildcard':
+    #    results = wildcard(key)
 
 
     return results
@@ -304,8 +315,15 @@ def getQueries():
                 formatted.append(query[i])
             elif (':' not in query[i] and '>' not in query[i] and '<' not in query[i] and '<=' not in query[i] and '>=' not in query[i] and '=' not in query[i]):
                 #formatted[-1] = '-'.join([formatted[-1], query[i]])
-                formatted.append(query[i])
-        print(formatted)
+                if i < len(query)-1:
+                    if (query[i-1][-1] not in symbols and query[i+1][0] not in symbols): 
+                        formatted.append(query[i])
+                else:
+                    if (query[i-1][-1] not in symbols):
+                        formatted.append(query[i])
+
+        
+        #print(formatted)
 
         #for i in formatted:
         #    lookup(i)
@@ -313,8 +331,8 @@ def getQueries():
         for i in formatted:
             results.append(lookup(i))
         
-        for i in results:
-            print(i)
+        #for i in results:
+        #    print(i)
         
         op = set.intersection(*map(set,results))
 
